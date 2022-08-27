@@ -99,7 +99,7 @@ class SpawnModelNode():
             def models_cb(models):
                 self.model_exists = self.args.wait in models.name
 
-            rospy.Subscriber("%s/model_states" % self.args.gazebo_namespace, ModelStates, models_cb)
+            rospy.Subscriber("%s/model_states" % self.args.gazebo_namespace, ModelStates, models_cb, queue_size=100)
             r = rospy.Rate(10)
             rospy.loginfo('Waiting for model {} before proceeding.'.format(self.args.wait))
             while not rospy.is_shutdown() and not self.model_exists:

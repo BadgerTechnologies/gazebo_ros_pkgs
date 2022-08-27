@@ -155,7 +155,7 @@ class SimIfaceControl():
 
     # setup rospy
     self.pub_set_pose_topic = rospy.Publisher(self.topic_name, Odometry)
-    rospy.Subscriber(self.wait_topic_name, rospy.AnyMsg, self.waitTopicInput)
+    rospy.Subscriber(self.wait_topic_name, rospy.AnyMsg, self.waitTopicInput, queue_size=100)
 
     # wait for topic if user requests
     if self.wait_for_topic:
