@@ -122,7 +122,7 @@ def load_config(files):
             continue
         # Let parsing exceptions leak out; we'll catch them by noticing the
         # absence of a test result file.
-        y = yaml.load(open(f))
+        y = yaml.load(open(f), Loader=yaml.SafeLoader)
         for t in y['topics']:
             topics.append(t)
         if 'services' in y:
