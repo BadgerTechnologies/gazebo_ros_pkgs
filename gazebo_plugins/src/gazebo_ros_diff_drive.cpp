@@ -194,6 +194,7 @@ void GazeboRosDiffDrive::Reset()
 #else
   last_update_time_ = parent->GetWorld()->GetSimTime();
 #endif
+  last_wheel_update_ = last_odom_tf_update_ = ros::Time::now();
   pose_encoder_.x = 0;
   pose_encoder_.y = 0;
   pose_encoder_.theta = 0;
@@ -232,6 +233,10 @@ void GazeboRosDiffDrive::publishWheelJointState()
 void GazeboRosDiffDrive::publishWheelTF()
 {
     ros::Time current_time = ros::Time::now();
+    if (current_time == last_wheel_update_) {
+        return;
+    }
+    last_wheel_update_ = current_time;
     for ( int i = 0; i < 2; i++ ) {
 
         std::string wheel_frame = gazebo_ros_->resolveTF(joints_[i]->GetChild()->GetName ());
@@ -483,7 +488,8 @@ void GazeboRosDiffDrive::publishOdometry ( double step_time )
         odom_.twist.twist.linear.y = cosf ( yaw ) * linear.Y() - sinf ( yaw ) * linear.X();
     }
 
-    if (publishOdomTF_ == true){
+    if ((publishOdomTF_ == true) && (last_odom_tf_update_ != current_time)) {
+        last_odom_tf_update_ = current_time;
         tf::Transform base_footprint_to_odom ( qt, vt );
         transform_broadcaster_->sendTransform (
             tf::StampedTransform ( base_footprint_to_odom, current_time,

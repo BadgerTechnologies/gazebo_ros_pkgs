@@ -150,6 +150,8 @@ namespace gazebo {
       double update_rate_;
       double update_period_;
       common::Time last_update_time_;
+      ros::Time last_wheel_update_;
+      ros::Time last_odom_tf_update_;
 
       OdomSource odom_source_;
       geometry_msgs::Pose2D pose_encoder_;
