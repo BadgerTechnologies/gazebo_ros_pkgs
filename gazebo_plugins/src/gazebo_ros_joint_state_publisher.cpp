@@ -146,6 +146,10 @@ void GazeboRosJointStatePublisher::OnUpdate ( const common::UpdateInfo & _info )
 
 void GazeboRosJointStatePublisher::publishJointStates() {
     ros::Time current_time = ros::Time::now();
+    if (current_time == last_ros_update_) {
+        return;
+    }
+    last_ros_update_ = current_time;
 
     joint_state_.header.stamp = current_time;
     joint_state_.name.resize ( joints_.size() );

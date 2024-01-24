@@ -80,6 +80,7 @@ private:
     double update_rate_;
     double update_period_;
     common::Time last_update_time_;
+    ros::Time last_ros_update_;
 
 };
 
